@@ -1,0 +1,26 @@
+{
+  "name": "twitter-bot",
+  "version": "1.0.0",
+  "description": "'A simple module to build twitter bots'",
+  "main": "bot.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "'gulp test'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fraziermork/twitter-bot.git"
+  },
+  "keywords": [
+    "'twitter",
+    "bot'"
+  ],
+  "author": "Frazier Mork <fraziermork@gmail.com> (https://frazier-fibonacci.herokuapp.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fraziermork/twitter-bot/issues"
+  },
+  "homepage": "https://github.com/fraziermork/twitter-bot#readme"
+}
