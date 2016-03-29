@@ -6,14 +6,14 @@ let expect      = chai.expect;
 //rewire the TwitterBot constructor to use a different set of API keys for the tests
 let rewire      = require('rewire');
 let Twit        = require('twit');
-let testKeys    = require(__dirname + '/../config/test-config2.js'); //TODO: will need to be changed later
+let testKeys    = require(__dirname + '/../config/test-config1.js'); //TODO: will need to be changed later
 let twit        = new Twit(testKeys);
 let TwitterBot  = rewire(__dirname + '/../lib/twitter-bot.js');
 TwitterBot.__set__('twit', twit);
 
 //declare the other user's twit
-let secondTestKeys = require(__dirname + '/../config/test-config1.js');
-let twit2 = new twit(secondTestKeys);
+let secondTestKeys = require(__dirname + '/../config/test-config2.js');
+let twit2 = new Twit(secondTestKeys);
 let twit2ScreenName;
 let twit2UserId;
 
