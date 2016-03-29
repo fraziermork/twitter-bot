@@ -4,37 +4,42 @@ let chai        = require('chai');
 let expect      = chai.expect;
 
 //rewire the TwitterBot constructor to use a different set of API keys for the tests
-let rewire      = require('rewire');
+// let rewire      = require('rewire');
 let Twit        = require('twit');
 let testKeys    = require(__dirname + '/../config/test-config1.js'); //TODO: will need to be changed later
+let TwitterBot  = require(__dirname + '/../lib/twitter-bot.js');
 let twit        = new Twit(testKeys);
-let TwitterBot  = rewire(__dirname + '/../lib/twitter-bot.js');
-TwitterBot.__set__('twit', twit);
+// TwitterBot.__set__('twit', twit);
 
 //declare the other user's twit
 let secondTestKeys = require(__dirname + '/../config/test-config2.js');
 let twit2 = new Twit(secondTestKeys);
 let twit2ScreenName;
 let twit2UserId;
+let twit2StatusesToDestroy = [];
 
 //declare twitterBot, the bot that we will be using for all of our tests
 let twitterBot;
+let twitterBotstatusesToDestroy = [];
 
 describe('twitter-bot.js', () => {
   
-  describe('constructor function', (done) => {
-    twitterBot = new TwitterBot();
-    expect(twitterBot.twit).to.eql(twit);
-    expect(twitterBot.SafeMode).to.equal(true);
-    expect(twitterBot.RESTOnly).to.equal(false);
-    expect(twitterBot.screen_name).to.equal(null);
-    expect(twitterBot.user_id).to.equal(null);
-    expect(twitterBot.classList).to.equal([]);
-    expect(twitterBot.tweetIdsRepliedTo).to.equal([]);
-    expect(twitterBot.tweetIdsThatMatchedSearch).to.equal([]);
-    expect(twitterBot.streamingSearchParameters).to.equal([]);
-    expect(twitterBot.streamingApiRouter).to.equal({});
-    done();
+  describe('constructor function', () => {
+    it('should let you build a new instance of a TwitterBot', (done) => {
+      twitterBot = new TwitterBot();
+      expect(twitterBot.twit).to.be.instanceof(Twit); //check to make sure the constuctor built a twit instance correctly
+      twitterBot.twit = twit;                         //then set the twit used from here on to be the one that uses the test keys
+      expect(twitterBot.SafeMode).to.equal(true);
+      expect(twitterBot.RESTOnly).to.equal(false);
+      expect(twitterBot.screen_name).to.equal(null);
+      expect(twitterBot.user_id).to.equal(null);
+      expect(twitterBot.classList).to.be.instanceof(Array);
+      expect(twitterBot.tweetIdsRepliedTo).to.be.instanceof(Array);
+      expect(twitterBot.tweetIdsThatMatchedSearch).to.be.instanceof(Array);
+      expect(twitterBot.streamingSearchParameters).to.be.instanceof(Array);
+      expect(twitterBot.streamingApiRouter).to.be.instanceof(Object);
+      done();
+    });
   });
   
   describe('initialize function', () => {
@@ -42,6 +47,8 @@ describe('twitter-bot.js', () => {
       twitterBot.initialize((data, response) => {
         expect(this.screen_name).to.not.equal(null);
         expect(this.user_id).to.not.equal(null);
+        console.log('Data from initialize:');
+        console.log(data);
         done();
       });
     });
@@ -57,7 +64,7 @@ describe('twitter-bot.js', () => {
           }
           console.log('Successfully got account/verify_credentials');
           twit2ScreenName = data.screen_name;
-          twit2UserId = data.id;
+          twit2UserId = data.id_str;
           resolve(data, response);
         }); 
       })
@@ -74,6 +81,7 @@ describe('twitter-bot.js', () => {
         .then((data, response) => {
           console.log('Successfully posted to statuses/update');
           tweetToReplyToId = data.id_str;
+          twit2StatusesToDestroy.push(data.id_str);
           done();
         })
         .catch((err) => {
@@ -84,33 +92,85 @@ describe('twitter-bot.js', () => {
     
     it('should let you tweet a string', (done) => {
       twitterBot.tweet('Hello world', (err, data, response) => {
+        if(err){
+          console.log('Error is');
+          console.log(err);
+        }
         expect(err).to.equal(null);
+        twitterBotstatusesToDestroy.push(data.id_str);
         expect(data.text).to.equal('Hello world');
         done();
       });
     });
+    
     it('should let you tweet a string at a user', (done) => {
       twitterBot.tweet('Hello world', (err, data, response) => {
+        if(err){
+          console.log('Error is');
+          console.log(err);
+        }
         expect(err).to.equal(null);
+        twitterBotstatusesToDestroy.push(data.id_str);
         expect(data.text).to.equal('@' + twit2ScreenName + ' Hello world');
         done();
       }, {
         screenNameToTweetAt: twit2ScreenName
       });
     });
+    
     it('should let you tweet a string in reply to a tweet', (done) => {
       twitterBot.tweet('Hello world', (err, data, response) => {
+        console.log('Inside of the tweet in reply test');
+        if(err){
+          console.log('Error is');
+          console.log(err);
+        }
         expect(err).to.equal(null);
+        twitterBotstatusesToDestroy.push(data.id_str);
         expect(data.text).to.equal('@' + twit2ScreenName + ' Hello world');
-        expect(data.in_reply_to_user_id_str).to.equal(twit2ScreenName);
-        expect(data.in_reply_to_user_id).to.equal(twit2UserId);
+        expect(data.in_reply_to_user_id_str).to.equal(twit2UserId);
         expect(data.in_reply_to_status_id_str).to.equal(tweetToReplyToId);
+        console.log('Just before the tweet in reply done');
         done();
       }, {
         screenNameToTweetAt: twit2ScreenName,
         tweetIdToReplyTo: tweetToReplyToId
       });
     });
+  });
+  
+  after('destroy tweets from tests', (done) => {
+    Promise.all(twitterBotstatusesToDestroy.map((currentId) => {
+      return new Promise((resolve, reject) => {
+        twitterBot.twit.post('statuses/destroy/:id', {id: currentId}, (err, data, response) => {
+          if (err){
+            return reject(err);
+          }
+          return resolve(data.id);
+        });
+      });
+    }))
+      .then((promiseAllDeleteData) => {
+        console.log('Deleted tweets ' + promiseAllDeleteData);
+        return Promise.all(twit2StatusesToDestroy.map((currentId) => {
+          return new Promise((resolve, reject) => {
+            twit2.post('statuses/destroy/:id', {id: currentId}, (err, data, response) => {
+              if (err){
+                return reject(err);
+              }
+              return resolve(data.id);
+            });
+          });
+        }));
+      })
+      .then((promiseAllDeleteData) => {
+        console.log('Deleted tweets ' + promiseAllDeleteData);
+        done();
+      })
+      .catch((err) => {
+        console.log('Error deleting all tweets', err);
+        done();
+      });  
   });
 });
 
