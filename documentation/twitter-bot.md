@@ -56,10 +56,4 @@ Reply bots are bots that look for mentions of their username and reply back, lik
 
 Search bots are bots that search Twitter for any phrase or set of phrases and either reply back or post to their own page, like [@Betelgeuse_3](https://twitter.com/betelgeuse_3) or [@boy2bot](https://twitter.com/boy2bot).
 
-Bots that respond to external events, like [@netflix_bot](https://twitter.com/netflix_bot?lang=en), can just call `twitterBot.tweet()`, the tweeting function built into this module, as appropriate. 
-
-
-
-
-
-
+Bots that respond to external events, like [@earthquakesSF](https://twitter.com/earthquakesSF), can just call `twitterBot.tweet()`, the tweeting function built into this module, as appropriate. 
