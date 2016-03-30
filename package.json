@@ -34,6 +34,7 @@
     "rewire": "^2.5.1"
   },
   "dependencies": {
+    "lodash": "^4.6.1",
     "twit": "^2.2.3"
   }
 }
