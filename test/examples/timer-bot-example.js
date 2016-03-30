@@ -16,13 +16,15 @@ let timerBotOptions = {
 
 
 function timerBotCallback(err, botName){
-  timerBotExample.bots.timerBots[botName].initialize(function(nameOfBotStarted) {
-    console.log('Name of bot built is the same as the bot that was started:');
-    console.log(botName === nameOfBotStarted);
+  timerBotExample.bots.timerBots[botName].initialize(function(botRunning) {
+    console.log(botName + ' is now running: ' + botRunning);
   });
 }
 
-timerBotExample.defineTimerBot('Hello world ' + i++, timerBotCallback, timerBotOptions);
+timerBotExample.defineTimerBot(function(){
+  let now = new Date();
+  return now.toISOString();
+}, timerBotCallback, timerBotOptions);
 
 console.log('Number of timer bots running:');
 console.log('timerBotExample.bots.timerBots.counter');
