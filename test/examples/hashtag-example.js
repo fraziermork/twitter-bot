@@ -22,4 +22,9 @@ let hashBotDefinedCallback = function(err, botName) {
       console.log(botName + ' started');
     }
   })
-}
+};
+let stringToSearchFor = '#yesimabot';
+
+let hashBotContent = 'hey, I am too!';
+
+hashBotExample.defineSearchBot(hashBotContent, stringToSearchFor, hashBotDefinedCallback, hashBotOptions);
