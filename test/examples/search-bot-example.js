@@ -13,7 +13,7 @@ let searchBotOptions = {
     }
   }
 };
-let searchBotDefinedCallback = function() {
+let searchBotDefinedCallback = function(error, botName) {
   searchBotExample.bots.searchBots.backwards_bot.initialize((err, botName) => {
     if (err) {
       console.log(err);
@@ -22,13 +22,16 @@ let searchBotDefinedCallback = function() {
     }
   });
 };
-let stringToSearchFor = 'stuff';
+let stringToSearchFor = 'spelled backwards';
 //going to make the content of my tweets be the text of their tweet except backwards
 let searchBotContent = function(tweet){
   console.log('searchBotContent called');
   return tweet.text.split('').reverse().join('');
 };
 searchBotExample.defineSearchBot(searchBotContent, stringToSearchFor, searchBotDefinedCallback, searchBotOptions);
+
+
+
 
 
 let searchBotOptions2 = {
@@ -52,7 +55,7 @@ let searchBotDefinedCallback2 = function() {
     }
   });
 };
-let stringToSearchFor2 = 'dna';
+let stringToSearchFor2 = 'dna, science';
 //going to make the content of my tweets be the text of their tweet except backwards
 let searchBotContent2 = function(tweet){
   console.log('searchBotContent called');
