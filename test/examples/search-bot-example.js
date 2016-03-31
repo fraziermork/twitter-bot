@@ -44,7 +44,7 @@ let searchBotOptions2 = {
 };
 
 let searchBotDefinedCallback2 = function() {
-  searchBotExample.bots.searchBots.backwards_bot.initialize((err, botName) => {
+  searchBotExample.bots.searchBots.SDRAWKCAB_DNA.initialize((err, botName) => {
     if (err) {
       console.log(err);
     } else {
