@@ -33,11 +33,10 @@ describe('twitter-bot.js', () => {
       expect(twitterBot.RESTOnly).to.equal(false);
       expect(twitterBot.screen_name).to.equal(null);
       expect(twitterBot.user_id).to.equal(null);
-      expect(twitterBot.classList).to.be.instanceof(Array);
-      expect(twitterBot.tweetIdsRepliedTo).to.be.instanceof(Array);
-      expect(twitterBot.tweetIdsThatMatchedSearch).to.be.instanceof(Array);
-      expect(twitterBot.streamingSearchParameters).to.be.instanceof(Array);
-      expect(twitterBot.streamingApiRouter).to.be.instanceof(Object);
+      expect(twitterBot._tweetIdsRepliedTo).to.be.instanceof(Array);
+      expect(twitterBot._tweetIdsThatMatchedSearch).to.be.instanceof(Array);
+      expect(twitterBot._streamingSearchParameters).to.be.instanceof(Array);
+      expect(twitterBot._streamingApiRouter).to.be.instanceof(Object);
       done();
     });
   });
