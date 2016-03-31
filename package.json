@@ -1,7 +1,7 @@
 {
   "name": "twitter-bot",
   "version": "1.0.0",
-  "description": "A simple module to build twitter bots.",
+  "description": "A module to facilitate building simple twitter bots.",
   "main": "./lib/twitter-bot.js",
   "directories": {
     "test": "test"
@@ -19,7 +19,7 @@
     "rest",
     "streaming"
   ],
-  "author": "Frazier Mork <fraziermork@gmail.com> (https://fraziermork.com/)",
+  "author": "Frazier Mork <fraziermork@gmail.com> (https://github.com/fraziermork/)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/fraziermork/twitter-bot/issues"
@@ -30,11 +30,17 @@
     "gulp": "^3.9.1",
     "gulp-eslint": "^2.0.0",
     "gulp-mocha": "^2.2.0",
-    "mocha": "^2.4.5",
-    "rewire": "^2.5.1"
+    "mocha": "^2.4.5"
   },
   "dependencies": {
     "lodash": "^4.6.1",
     "twit": "^2.2.3"
-  }
+  },
+  "maintainers": [
+    {
+      "name": "Frazier Mork",
+      "email": "fraziermork@gmail.com"
+    }
+  ],
+  
 }
