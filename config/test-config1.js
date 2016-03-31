@@ -1,7 +1,7 @@
 'use strict';
 
 let keys = module.exports = {};
-keys.consumer_key         = process.env.TWITTER_CONSUMER_KEY_TEST1;
-keys.consumer_secret      = process.env.TWITTER_CONSUMER_SECRET_TEST1;
-keys.access_token         = process.env.TWITTER_ACCESS_TOKEN_TEST1;
-keys.access_token_secret  = process.env.TWITTER_ACCESS_TOKEN_SECRET_TEST1;
+keys.consumer_key         = 'P4Mc0U7Vmz5StzgsvyKBRTA0p';
+keys.consumer_secret      = 'qMh5llCmcTay0GF7wu6raDoa70dmqDtU9amPJEk3GZzRDjK7BR';
+keys.access_token         = '714496252805664768-7GfCDg2UBxi4GLFOkctO7U5DirZwdTt';
+keys.access_token_secret  = 'SNTnYjzxsfzN1u8PZ69cxt1cqXPZoo0XI97P4p4qeHwwl';
