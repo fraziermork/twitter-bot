@@ -1,8 +1,8 @@
 {
   "name": "twitter-bot",
   "version": "1.0.0",
-  "description": "'A simple module to build twitter bots'",
-  "main": "./lib/bot.js",
+  "description": "A simple module to build twitter bots.",
+  "main": "./lib/twitter-bot.js",
   "directories": {
     "test": "test"
   },
