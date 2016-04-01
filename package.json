@@ -33,7 +33,7 @@
     "mocha": "^2.4.5"
   },
   "dependencies": {
-    "lodash": "^4.6.1",
+    "lodash": "^4.7.0",
     "twit": "^2.2.3"
   },
   "maintainers": [

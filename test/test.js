@@ -1,10 +1,10 @@
 'use strict';
-//Chai stuff
+// Chai stuff
 let chai        = require('chai');
 let expect      = chai.expect;
 
-//rewire the TwitterBot constructor to use a different set of API keys for the tests
-// let rewire      = require('rewire');
+// rewire the TwitterBot constructor to use a different set of API keys for the tests
+let rewire      = require('rewire');
 let Twit        = require('twit');
 let testKeys    = require(__dirname + '/../config/test-config1.js'); //TODO: will need to be changed later
 let TwitterBot  = require(__dirname + '/../lib/twitter-bot.js');
@@ -23,7 +23,7 @@ let twitterBot;
 let twitterBotstatusesToDestroy = [];
 
 describe('twitter-bot.js', () => {
-  
+
   describe('constructor function', () => {
     it('should let you build a new instance of a TwitterBot', (done) => {
       twitterBot = new TwitterBot();
@@ -40,7 +40,7 @@ describe('twitter-bot.js', () => {
       done();
     });
   });
-  
+
   describe('initialize function', () => {
     it('should correctly set the value of username and id', (done) => {
       twitterBot.initialize((data, response) => {
@@ -52,7 +52,7 @@ describe('twitter-bot.js', () => {
       });
     });
   });
-  
+
   describe('tweet function', () => {
     let tweetToReplyToId = null;
     before('set up tweets to reply to', (done) => {
@@ -65,7 +65,7 @@ describe('twitter-bot.js', () => {
           twit2ScreenName = data.screen_name;
           twit2UserId = data.id_str;
           resolve(data, response);
-        }); 
+        });
       })
         .then((data, response) => {
           return new Promise((resolve, reject) => {
@@ -88,7 +88,7 @@ describe('twitter-bot.js', () => {
           done();
         });
     });
-    
+
     it('should let you tweet a string', (done) => {
       twitterBot.tweet('Hello world', (err, data, response) => {
         if(err){
@@ -101,7 +101,7 @@ describe('twitter-bot.js', () => {
         done();
       });
     });
-    
+
     it('should let you tweet a string at a user', (done) => {
       twitterBot.tweet('Hello world', (err, data, response) => {
         if(err){
@@ -116,7 +116,7 @@ describe('twitter-bot.js', () => {
         screenNameToTweetAt: twit2ScreenName
       });
     });
-    
+
     it('should let you tweet a string in reply to a tweet', (done) => {
       twitterBot.tweet('Hello world', (err, data, response) => {
         console.log('Inside of the tweet in reply test');
@@ -137,7 +137,7 @@ describe('twitter-bot.js', () => {
       });
     });
   });
-  
+
   after('destroy tweets from tests', (done) => {
     Promise.all(twitterBotstatusesToDestroy.map((currentId) => {
       return new Promise((resolve, reject) => {
@@ -169,12 +169,12 @@ describe('twitter-bot.js', () => {
       .catch((err) => {
         console.log('Error deleting all tweets', err);
         done();
-      });  
+      });
   });
 });
 
 
 // describe('tweet function', () => {
-// 
-// 
+//
+//
 // });
