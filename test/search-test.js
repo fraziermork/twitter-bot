@@ -30,15 +30,17 @@ describe('defineSearchBot.js', ()=>{
         callback: testDefinedCallback
       };
 
-      twitterBot.defineSearchBot(searchContent, searchString, null, searchBotOptions);
+      twitterBot.defineSearchBot(searchContent, searchString, function(){
+        expect(twitterBot.bots.searchBots).has.ownProperty('test_bot');
+        expect(twitterBot.bots.searchBots.test_bot).to.be.an('object');
+        expect(twitterBot.bots.searchBots.test_bot.botName).to.eql('test_bot');
+        expect(twitterBot.bots.searchBots.test_bot.stringToSearchFor).to.eql('search');
+        expect(twitterBot.bots.searchBots.test_bot.content).to.eql('this is a string');
+        expect(twitterBot.bots.searchBots.test_bot.callback(null, 'working')).to.eql('working');
+        done();
+        
+      }, searchBotOptions);
 
-      expect(twitterBot.bots.searchBots).has.ownProperty('test_bot');
-      expect(twitterBot.bots.searchBots.test_bot).to.be.an('object');
-      expect(twitterBot.bots.searchBots.test_bot.botName).to.eql('test_bot');
-      expect(twitterBot.bots.searchBots.test_bot.stringToSearchFor).to.eql('search');
-      expect(twitterBot.bots.searchBots.test_bot.content).to.eql('this is a string');
-      expect(twitterBot.bots.searchBots.test_bot.callback(null, 'working')).to.eql('working');
-      done();
     });
 
   });
