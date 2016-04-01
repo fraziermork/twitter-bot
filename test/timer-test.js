@@ -1,98 +1,65 @@
-'use strict';
-// //chai test stuff
-// let chai        = require('chai');
-// let expect      = chai.expect;
-//
-// //rewire
-// let rewire = require('rewire');
-// let Twit        = require('twit');
-// let testKeys    = require(__dirname + '/../config/test-config1.js');
-// let TimerBot  = require(__dirname + '/../../lib/defineTimerBot.js');
-// let twit        = new Twit(testKeys);
-// // _TimerBot.__proto__('twit', twit);
-// let timerBot;
-// // timerBot.twit = twit;
-// // let timerBot;
-//
-//
-// //testing the promise API
-// describe('define TimerBot', function(){
-//   timerBot = null;
-//   before(function (done){
-//     timerBot = new TimerBot();
-//   });
-// });
-//
-// describe('constructor', function(){
-//   it('should let you build a new instance',function(done){
-//     console.log('in constructor');
-//     timerBot = new _TimerBot();
-//     expect(timerBot.twit).to.be.instanceof(Twit);
-//     timerBot.twit = twit;
-//     expect(timerBot.dontStopOnError).to.eql(false);
-//     console.log(timerBot);
-//     expect(timerBot._running).to.eql(false);
-//     expect(timerBot.interval).to.eql(3600000);
-//     done();
-//
-//   });
-//
-//
-//
-//
-// });
-//   // it('GET account/verify_credentials from ', function(done){
-//   //   twit.get('account/verify_credentials',)
-//   // });
-//   describe('initialize TimerBot function', function(){
-//     it('should check to see if the user id exists', function(done){
-//       timerBot.initialize(function(data, response) {
-//         expect(this._running).to.equal(true);
-//         expect(this.dontStopOnError).to.equal(true);
-//         console.log('Data from initialize: ');
-//         console.log(data);
-//         done();
-//       });
-//
-//     });
-//
-//   });
-//
-// //   describe('intialize method', () => {
-// //
-// //   });
-// // });
+
+
 
 'use strict';
 let Twit      = require('twit');
 // let rewire    = require('rewire');
-require(__dirname + '/examples/timer-bot-example.js');
+let TimerBot = require(__dirname + '/../lib/defineTimerBot.js');
 let chai      = require('chai');
 let expect    = chai.expect;
-let keys      = require(__dirname + '/../config/test-config1.js');
+let keys      = require(__dirname + '/../config/test-config1-lw.js');
 let t         = new Twit(keys);
+let counter = 0;
+let i =0;
 
+let timerBot;
 // var server    = rewire(__dirname + '/../server.js');
 // server.__set__('t', t);
 
+describe('defineTimerBot.js', function(){
 
 
 describe('it should post statuses', function(){
   before('setting up the status', (done) => {
-    setTimeout(done, 120000);
-    done();
+    // timerBot = new TimerBot();
+    setTimeout(done, 1200);
+    // done();
 
   });
-  it('should let you post statuses', (done) => {
-    t.get('statuses/user_timeline', {screen_name: 'backwards_bot'}, function(err, data, response){
+  it('should let you get statuses to post', function(done) {
+    t.get('statuses/user_timeline', {status: 'Hello', screen_name: 'backwards_bot'}, function(err, data, response){
       console.log('made request to get statuses');
-      expect(err).to.equal(undefined);
-      console.log('DATA IS _____________________________', data);
-      console.log('RESPONSE IS _____________________________', response);
+      console.log('DATA: ' + data);
+      expect(err).to.eql(undefined);
+      console.log(err);
+      // console.log(data.screen_name)
+      // expect(data.screeen_name).to.eql('backwards_bot');
+      // expect(TimberBot.dontStopOnError).to.eql(true);
+      expect(data).to.be.instanceof(Array);
+      // expect(this.interval).to.eql()
+      console.log('SCREEN NAME: ' + response.screen_name);
+      expect(response.statusCode).to.eql(200);
+      // expect(response.method).to.eql('GET');
+
+      // console.log(response);
+      // console.log();
+      // expect
+      counter =+ 1;
+      // expect(optionObj.botName).to.eql('timerBot' + counter);
+      // console.log('DATA IS _____________________________', data);
+      console.log('RESPONSE IS _____________________________', response.headers);
       done();
-    })
-    t.post('statuses/update', {})
+    });
+    // t.post('statuses/update', {status: 'hey'}, function(err, data, response){
+    //   console.log('POST DATA: ' + data);
+    // });
+
+  // textReply();
 
   });
+
+});
+
+
 
 });

@@ -1,11 +1,11 @@
 'use strict';
 
 let Twit = require('twit');
-let keys = require(__dirname + '/config2.js');
+let keys = require(__dirname + '/../config/test-config1-lw.js');
 let t = new Twit(keys);
 
 
-let searchQuery = 'jaws';
+let searchQuery = 'Ryan Gosling';
 
 let tweets;
 //arrays to hold all the search data
@@ -16,7 +16,13 @@ let arrayHashTag = [];
 let arrayMentions = [];
 
 
-
+function searchUser (data){
+  t.get('users/search', {q: searchQuery}, function(err, data, response){
+    console.log('****USER DATA********');
+    // console.log(data);
+  });
+}
+searchUser();
 
 function searchTweet (query){
   t.get('search/tweets', {q: searchQuery ,result_type: 'recent', lang: 'en', count: 10}, function(err, data, response){
@@ -84,7 +90,7 @@ searchURL();
 
 //hash tag array
 function searchHashTag (query){
-  t.get('search/tweets', {q: searchQuery, count: 10}, function(err, data, response){
+  t.get('search/tweets', {q: searchQuery, count: 20}, function(err, data, response){
     console.log('***** HASHTAGS *********');
     tweets = data.statuses;
     for(var i = 0; i < tweets.length; i++) {
@@ -103,7 +109,7 @@ searchHashTag();
 
 //Mentions array
 function searchMentions (query){
-  t.get('search/tweets', {q: searchQuery, count: 10}, function(err, data, response){
+  t.get('search/tweets', {q: searchQuery, count: 20}, function(err, data, response){
     console.log('*****Mentions*********');
     tweets = data.statuses;
     for(var i = 0; i < tweets.length; i++) {
