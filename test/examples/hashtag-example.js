@@ -21,7 +21,7 @@ let hashBotDefinedCallback = function(err, botName) {
     } else {
       console.log(botName + ' started');
     }
-  })
+  });
 };
 let stringToSearchFor = '#yesimabot';
 

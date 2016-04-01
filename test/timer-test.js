@@ -1,10 +1,7 @@
-
-
-
 'use strict';
 let Twit      = require('twit');
 // let rewire    = require('rewire');
-let TimerBot = require(__dirname + '/../lib/defineTimerBot.js');
+// let TimerBot  = require(__dirname + '/../lib/defineTimerBot.js');
 let chai      = require('chai');
 let expect    = chai.expect;
 let keys      = require(__dirname + '/../config/test-config1.js');
