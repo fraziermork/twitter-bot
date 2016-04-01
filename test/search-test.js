@@ -25,17 +25,6 @@ describe('defineSearchBot.js', ()=>{
     it('should let you define a new search bot', function(done) {
       let searchContent = 'this is a string';
       let searchString = 'search';
-
-      // let sbDefinedCallback = function(error, botName) {
-      //   twitterBot.bots.searchBots.test_bot.initialize(function(err, botName) {
-      //     if (err) {
-      //       console.error(err);
-      //     } else {
-      //       console.log(botName + ' started');
-      //     }
-      //   });
-      // };
-
       let searchBotOptions = {
         botName: 'test_bot',
         callback: testDefinedCallback
@@ -51,9 +40,6 @@ describe('defineSearchBot.js', ()=>{
       expect(twitterBot.bots.searchBots.test_bot.callback(null, 'working')).to.eql('working');
       done();
     });
-    it('should have called initialize on that bot', function(done) {
-      done();
-    });
 
   });
 
@@ -62,8 +48,6 @@ describe('defineSearchBot.js', ()=>{
     before('setting up a new searchBot', function(done) {
       searchContent2 = 'this is another string';
       searchString2 = 'another';
-
-
       searchBotOptions2 = {
         botName: 'test_bot2',
         callback: testDefinedCallback
