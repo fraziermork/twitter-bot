@@ -23,8 +23,8 @@ let hashBotDefinedCallback = function(err, botName) {
     }
   });
 };
-let stringToSearchFor = '#yesimabot';
+let stringToSearchFor = 'inc';
 
-let hashBotContent = 'hey, I am too!';
+let hashBotContent = 'Good luck #darwinawards';
 
 hashBotExample.defineSearchBot(hashBotContent, stringToSearchFor, hashBotDefinedCallback, hashBotOptions);
