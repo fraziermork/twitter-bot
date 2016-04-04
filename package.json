@@ -1,6 +1,6 @@
 {
   "name": "twitter-bot",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "A module to facilitate building simple twitter bots.",
   "main": "./lib/twitter-bot.js",
   "directories": {
@@ -19,7 +19,26 @@
     "rest",
     "streaming"
   ],
-  "author": "Frazier Mork <fraziermork@gmail.com> (https://github.com/fraziermork/)",
+  "author": {
+    "name": "Frazier Mork",
+    "email": "fraziermork@gmail.com",
+    "url": "fraziermork.com"
+  },
+  "contributors": [
+    {
+      "name": "Frazier Mork",
+      "email": "fraziermork@gmail.com",
+      "url": "fraziermork.com"
+    }, 
+    {
+      "name": "Lex Myers",
+      "email": "lex.myers@gmail.com"
+    }, 
+    {
+      "name": "Lisa Wenke",
+      "email": "lwenke@gmail.com"
+    }
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/fraziermork/twitter-bot/issues"
@@ -39,8 +58,17 @@
   "maintainers": [
     {
       "name": "Frazier Mork",
-      "email": "fraziermork@gmail.com"
+      "email": "fraziermork@gmail.com",
+      "url": "fraziermork.com"
+    }, 
+    {
+      "name": "Lex Myers",
+      "email": "lex.myers@gmail.com"
+    }, 
+    {
+      "name": "Lisa Wenke",
+      "email": "lwenke@gmail.com"
     }
-  ]
+  ], 
   
 }

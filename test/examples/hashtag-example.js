@@ -21,10 +21,10 @@ let hashBotDefinedCallback = function(err, botName) {
     } else {
       console.log(botName + ' started');
     }
-  })
+  });
 };
-let stringToSearchFor = '#yesimabot';
+let stringToSearchFor = 'your mom';
 
-let hashBotContent = 'hey, I am too!';
+let hashBotContent = 'Good luck #darwinawards';
 
 hashBotExample.defineSearchBot(hashBotContent, stringToSearchFor, hashBotDefinedCallback, hashBotOptions);

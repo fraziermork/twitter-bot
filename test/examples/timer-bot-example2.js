@@ -1,7 +1,7 @@
 'use strict';
 let TwitterBot = require(__dirname + '/../../../lib/twitter-bot.js');
 let timerBotExample = new TwitterBot();
-let i = 0;
+// let i = 0;
 
 timerBotExample.initialize();
 
