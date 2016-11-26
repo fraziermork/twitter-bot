@@ -23,7 +23,7 @@ let hashBotDefinedCallback = function(err, botName) {
     }
   });
 };
-let stringToSearchFor = 'your mom';
+let stringToSearchFor = 'inc';
 
 let hashBotContent = 'Good luck #darwinawards';
 

@@ -5,16 +5,16 @@
 The code below demonstrates a simple version of how to use this module. For more thorough examples, see the examples inside the ~./tests/examples directory.
 
 
-```
+```javascript
 let TwitterBot = require('twitter-bot');
 let twitterBot = new TwitterBot();
   
-let tweetFunction = () => {
+function tweetFunction() {
   let now = new Date();
   return now.toISOString();
 }
 
-let callbackFunction = (err, botName) => {
+function callbackFunction(err, botName) {
   if (err) {
     console.log(err);
   } else {
