@@ -29,11 +29,11 @@
       "name": "Frazier Mork",
       "email": "fraziermork@gmail.com",
       "url": "fraziermork.com"
-    }, 
+    },
     {
       "name": "Lex Myers",
       "email": "lex.myers@gmail.com"
-    }, 
+    },
     {
       "name": "Lisa Wenke",
       "email": "lwenke@gmail.com"
@@ -52,6 +52,7 @@
     "mocha": "^2.4.5"
   },
   "dependencies": {
+    "debug": "^2.3.3",
     "lodash": "^4.7.0",
     "twit": "^2.2.3"
   },
@@ -61,6 +62,5 @@
       "email": "fraziermork@gmail.com",
       "url": "fraziermork.com"
     }
-  ] 
-  
+  ]
 }
