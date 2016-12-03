@@ -1,6 +1,13 @@
 {
   "rules": {
     "no-console": 0,
+    "indent": [2, 2],
+    "quotes": [2, "single"],
+    "linebreak-style": [2, "unix"],
+    "semi": [2, "always"], 
+    "comma-dangle": [1, "always-multiline"],
+    "arrow-body-style": [2, "always"],
+    "wrap-iife": [2, "inside"],
     "no-unused-vars": [
       2, 
       {
@@ -8,25 +15,41 @@
         "args": "none"
       }
     ],
-    "indent": [
-      2,
-      2
-    ],
-    "quotes": [
-      2,
-      "single"
-    ],
-    "linebreak-style": [
+    "no-use-before-define": [
       2, 
-      "unix"
+      { "functions": false }
     ],
-    "semi": [
-      2,
-      "always"
-    ], 
-    "comma-dangle": [
-      1, 
-      "always-multiline"
+    "import/no-extraneous-dependencies": [
+      2, 
+      { "devDependencies": [ "**/*.test.js" ] }
+    ],
+    "space-before-function-paren": [
+      2, 
+      {
+        "anonymous": "never", 
+        "named": "never"
+      }
+    ],
+    "key-spacing": [
+      2, 
+      {
+        "singleLine": {
+          "beforeColon": false, 
+          "afterColon": true, 
+          "mode": "strict"
+        }, 
+        "multiLine": {
+          "beforeColon": false, 
+          "afterColon": true, 
+          "mode": "minimum"
+        },
+        "align": {
+          "beforeColon": false, 
+          "afterColon": true, 
+          "mode": "strict",
+          "on": "value"
+        }
+      }
     ]
   },
   "env": {
@@ -37,7 +60,10 @@
     "modules": true,
     "experimentalObjectRestSpread": true
   },
-  "extends": "eslint:recommended", 
+  "extends": [
+    "eslint:recommended",
+    "plugin:import/errors"
+  ], 
   "parserOptions": {
     "sourceType": "module"
   }

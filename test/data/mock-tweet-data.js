@@ -1,6 +1,5 @@
 // Contains mock tweet data to use 
 const mockTweets = {
-  
   // Mock tweets that would have come from the bot 
   mine: {
     
