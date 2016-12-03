@@ -1,4 +1,5 @@
 // npm modules 
+const debug        = require('debug')('tb:test-Unitwit');
 const chai         = require('chai');
 const EventEmitter = require('events');
 const Promise      = require('bluebird');
@@ -167,26 +168,89 @@ describe('Unitwit', function() {
         this.testTwit.flush();
       });
       describe('errors', function() {
-        it('should throw exception if the request was not expected');
-        it('should throw exception if a different request was expected');
-        it('should throw exception if the params did not match');
-        it('should throw exception if that was the type of response set by Unitwit.prototype.expect', function(done) {
+        it('should throw exception if the request was not expected', function(done) {
           let method   = 'GET';
           let endpoint = 'fubar';
           let params   = { track: 'stuff' };
-          let response = new Error('SNAFU');
-          this.testTwit.expect(method, endpoint, response, params);
           this.testTwit.request(method, endpoint, params);
+          
           this.testTwit.flusher.once('flush', () => {
-            this.testTwit.verifyExpectationsMet();
+            // TODO: Figure out a way to do this without having to bind things all the time? 
+            expect(this.testTwit.verifyExpectationsMet.bind(this.testTwit)).to.throw(Error, 'Unmet expectations: 0, unexpected requests: 1.');
+            done();
           });
-          expect(() => {
-            this.testTwit.flush();
-          }).to.throw(response);
-          done();
-          
-          
+          this.testTwit.flush();
         });
+        it('should throw exception if a different request was expected', function(done) {
+          let method            = 'GET';
+          let expectedEndpoint  = 'foo';
+          let requestedEndpoint = 'bar';
+          let params            = { track: 'stuff' };
+          let response          = { foo: 'bar' };
+          this.testTwit.expect(method, expectedEndpoint, response, params);
+          this.testTwit.request(method, requestedEndpoint, params);
+          
+          this.testTwit.flusher.once('flush', () => {
+            expect(this.testTwit.verifyExpectationsMet.bind(this.testTwit)).to.throw(Error, 'Unmet expectations: 1, unexpected requests: 1.');
+            done();
+          });
+          this.testTwit.flush();
+        });
+        it('should throw exception if the params did not match', function(done) {
+          // A request is 'expected' if the endpoint and method match, but this doesn't check the params
+          let method         = 'GET';
+          let endpoint       = 'fubar';
+          let expectedParams = { track: 'stuff' };
+          let requestParams  = { track: 'otherStuff', foo: 'bar' };
+          let response       = { foo: 'bar' };
+          this.testTwit.expect(method, endpoint, response, expectedParams);
+          this.testTwit.request(method, endpoint, requestParams)
+            .then(() => {})
+            .catch((err) => {
+              debug('got into catch block, error: ', err);
+              expect(err).to.be.instanceof(Error);
+              expect(err.message).to.equal('Parameter "track" didn\'t march on request("otherStuff") and expectation ("stuff").');
+            });
+          // debug('REQUEST: ', request);
+          // Handle the error thrown because the params didn't match 
+          // this.testTwit.flusher.on('error', (err) => {
+          //   debug('got into error handler on flusher, error: ', err);
+          //   expect(err).to.be.instanceof(Error);
+          //   expect(err.message).to.equal('Parameter "track" didn\'t march on request("otherStuff") and expectation ("stuff").');
+          // });
+          
+          // Handle the error thrown 
+          this.testTwit.flusher.once('flush', () => {
+            // TODO: Figure out a way to do this without having to bind things all the time? 
+            this.testTwit.verifyExpectationsMet();
+            // expect(this.testTwit.verifyExpectationsMet.bind(this.testTwit)).to.throw(Error, 'Unmet expectations: 1, unexpected requests: 0.');
+            done();
+          });
+          this.testTwit.flush();
+          // expect(this.testTwit.flush.bind(this.testTwit)).to.throw(Error, 'Parameter "track" didn\'t march on request("otherStuff") and expectation ("stuff").');
+          
+          // try {
+          //   this.testTwit.flush();
+          // } catch (err) {
+            // debug('got into catch block, error: ', err);
+            // expect(err).to.be.instanceof(Error);
+            // expect(err.message).to.equal('Parameter "track" didn\'t march on request("otherStuff") and expectation ("stuff").');
+          // }
+        });
+      
+        // it('should throw exception if that was the type of response set by Unitwit.prototype.expect', function(done) {
+        //   let method   = 'GET';
+        //   let endpoint = 'fubar';
+        //   let params   = { track: 'stuff' };
+        //   let response = new Error('SNAFU');
+        //   this.testTwit.expect(method, endpoint, response, params);
+        //   this.testTwit.request(method, endpoint, params);
+        //   this.testTwit.flusher.once('flush', () => {
+        //     this.testTwit.verifyExpectationsMet();
+        //   });
+        //   expect(this.testTwit.flush.bind(this.testTwit)).to.throw(response);
+        //   done();
+        // });
       });
     });
     

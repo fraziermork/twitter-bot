@@ -79,8 +79,8 @@ function post(...args) {
 
 /**  
  * request - Fakes a request to twitter. 
+ * @todo write tests for the callback, as of now, only checks that it works correctly as a promise   
  * 
- *    
  * @param  {string} method   The http method to use   
  * @param  {string} endpoint The twitter endpoint to hit   
  * @param  {object} [params] An object defining the request options 
@@ -89,24 +89,25 @@ function post(...args) {
  */   
 function request(method, endpoint, params = {}, callback) {
   debug(`${method} request made to ${endpoint}.`);
-  this.flusher.once('flush', () => {
-    debug(`Responding to ${method} request to ${endpoint}.`);
-    for (let i = 0; i < this.expectations.length; i++) {
-      let currentExpectation = this.expectations[i];
-      
-      // Event emitters fire callbacks in the order they are registered, so the first match found is the correct match
-      if (currentExpectation.method === method && currentExpectation.endpoint === endpoint) {
-        let response = currentExpectation.response;
-        return new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
+    this.flusher.once('flush', () => {
+      debug(`Responding to ${method} request to ${endpoint}.`);
+      for (let i = 0; i < this.expectations.length; i++) {
+        let currentExpectation = this.expectations[i];
+        
+        // Event emitters fire callbacks in the order they are registered, so the first match found is the correct match
+        if (currentExpectation.method === method && currentExpectation.endpoint === endpoint) {
+          this.expectations.splice(i, 1);
+          let response = currentExpectation.response;
           
           // If the request and expectation params didn't match, throw error 
           let paramKeys = Object.keys(params);
           for (let j = 0; j < paramKeys.length; j++) {
             let key = paramKeys[j];
             if (params[key] !== currentExpectation.params[key]) {
-              let mismatch = new Error(`Parameter ${key} didn't match on request (${params[key]}) and expectation (${currentExpectation.params[key]}).`);
+              let mismatch = new Error(`Parameter "${key}" didn't match on request ("${params[key]}") and expectation ("${currentExpectation.params[key]}").`);
               callback && callback(mismatch);
-              throw mismatch;
+              return reject(mismatch);
             }
           }
           
@@ -116,22 +117,21 @@ function request(method, endpoint, params = {}, callback) {
             return reject(response);
           }
           
-          // Everything is cool 
-          debug('this.expectations: ', this.expectations);
-          this.expectations.splice(i, 1);
+          // Respond as instructed 
           callback && callback(null, response);
           return resolve(response);
-        });
+          
+        }
       }
-    }
-    
-    // No match was found, pushing into requests array for reference 
-    // TODO: figure out a less clunky way to pass on info about unexpected request  
-    this.requests.push({
-      method, 
-      endpoint, 
-      params, 
-      callback,
+      
+      // No match was found, pushing into requests array for reference 
+      // TODO: figure out a less clunky way to pass on info about unexpected request  
+      this.requests.push({
+        method, 
+        endpoint, 
+        params, 
+        callback,
+      });
     });
   });
 }
