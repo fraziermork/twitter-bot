@@ -1,6 +1,7 @@
 // npm modules 
 const chai         = require('chai');
 const EventEmitter = require('events');
+const Promise      = require('bluebird');
 
 // internal modules 
 const Unitwit = require('./index');
@@ -26,7 +27,7 @@ describe('Unitwit', function() {
       expect(testTwit.expectations).to.be.instanceof(Array);
       expect(testTwit.requests).to.be.instanceof(Array);
     });
-    describe('invalid credentials', function() {
+    describe('errors on invalid credentials', function() {
       it('should break without config', function() {
         expect(function() {
           new Unitwit();
@@ -53,6 +54,8 @@ describe('Unitwit', function() {
       });
     });
   });
+  
+  
   describe('streaming api mock', function() {
     beforeEach('construct testTwit', function() {
       this.testTwit = new Unitwit({
@@ -86,8 +89,106 @@ describe('Unitwit', function() {
         this.testTwit.stream();
       }).to.throw(Error, 'Streaming API endpoint is required.');
     });
+    describe('mock streaming events', function() {
+      beforeEach('initiate the stream', function() {
+        this.testTwit.stream('user', { track: 'stuff' });
+      });
+      it('should be able to mock stream events', function(done) {
+        let eventName = 'fubar';
+        let eventData = { foo: 'bar' };
+        this.testTwit.apiStream.once(eventName, (data) => {
+          expect(data).to.eql(eventData);
+          done();
+        });
+        this.testTwit.mockStreamEvent(eventName, eventData);
+      });
+    });
   });
-  // describe('REST api mock', function() {
-  //   
-  // });
+  
+  
+  describe('REST api mock', function() {
+    beforeEach('construct testTwit', function() {
+      this.testTwit = new Unitwit({
+        consumer_key:        'a', 
+        consumer_secret:     'b', 
+        access_token:        'c',
+        access_token_secret: 'd',
+      });
+    });
+    describe('Unitwit.prototype.verifyExpectationsMet', function() {
+      it('should throw an error if there is an unmet expectation.', function() {
+        this.testTwit.expectations.push({ foo: 'bar' });
+        expect(() => {
+          this.testTwit.verifyExpectationsMet();
+        }).to.throw(Error, 'Unmet expectations: 1, unexpected requests: 0.');
+      });
+      it('should throw an error if there was an unexpected request.', function() {
+        this.testTwit.requests.push({ foo: 'bar' });
+        expect(() => {
+          this.testTwit.verifyExpectationsMet();
+        }).to.throw(Error, 'Unmet expectations: 0, unexpected requests: 1.');
+      });
+    });
+    describe('Unitwit.prototype.expect', function() {
+      it('should add an expectation', function() {
+        let expectedExpectation = {
+          method:   'foo', 
+          endpoint: 'bar', 
+          response: 'hello', 
+          params:   'world', 
+        };
+        this.testTwit.expect(expectedExpectation.method, expectedExpectation.endpoint, expectedExpectation.response, expectedExpectation.params);
+        expect(this.testTwit.expectations.length).to.equal(1);
+        expect(this.testTwit.expectations[0]).to.eql(expectedExpectation);
+      });
+    });
+    describe('Unitwit.prototype.flush', function() {
+      it('should emit the flush event', function(done) {
+        this.testTwit.flusher.once('flush', done);
+        this.testTwit.flush();
+      });
+    });
+    describe('Unitwit.prototype.request', function() {
+      // afterEach('verify expectations met', function() {
+      //   this.testTwit.verifyExpectationsMet();
+      // });
+      it('should respond to an expected request with the response set by Unitwit.prototype.expect', function(done) {
+        let method   = 'GET';
+        let endpoint = 'fubar';
+        let params   = { track: 'stuff' };
+        let response = { foo: 'bar' };
+        this.testTwit.expect(method, endpoint, response, params);
+        this.testTwit.request(method, endpoint, params);
+        
+        this.testTwit.flusher.once('flush', () => {
+          this.testTwit.verifyExpectationsMet();
+          done();
+        });
+        this.testTwit.flush();
+      });
+      describe('errors', function() {
+        it('should throw exception if the request was not expected');
+        it('should throw exception if a different request was expected');
+        it('should throw exception if the params did not match');
+        it('should throw exception if that was the type of response set by Unitwit.prototype.expect', function(done) {
+          let method   = 'GET';
+          let endpoint = 'fubar';
+          let params   = { track: 'stuff' };
+          let response = new Error('SNAFU');
+          this.testTwit.expect(method, endpoint, response, params);
+          this.testTwit.request(method, endpoint, params);
+          this.testTwit.flusher.once('flush', () => {
+            this.testTwit.verifyExpectationsMet();
+          });
+          expect(() => {
+            this.testTwit.flush();
+          }).to.throw(response);
+          done();
+          
+          
+        });
+      });
+    });
+    
+  });
 });

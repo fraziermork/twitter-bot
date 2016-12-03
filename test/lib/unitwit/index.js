@@ -89,7 +89,7 @@ function post(...args) {
  */   
 function request(method, endpoint, params = {}, callback) {
   debug(`${method} request made to ${endpoint}.`);
-  this.flusher.on('flush', () => {
+  this.flusher.once('flush', () => {
     debug(`Responding to ${method} request to ${endpoint}.`);
     for (let i = 0; i < this.expectations.length; i++) {
       let currentExpectation = this.expectations[i];
@@ -117,6 +117,8 @@ function request(method, endpoint, params = {}, callback) {
           }
           
           // Everything is cool 
+          debug('this.expectations: ', this.expectations);
+          this.expectations.splice(i, 1);
           callback && callback(null, response);
           return resolve(response);
         });
