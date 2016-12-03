@@ -2,3 +2,6 @@ node_modules
 config/test-config1-lw.js
 **/npm-debug.log 
 **/.DS_Store
+old-version
+notes
+.npm

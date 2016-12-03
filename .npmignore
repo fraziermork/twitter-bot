@@ -1,2 +1,8 @@
 node_modules
 documentation
+old-version
+old-version
+notes
+
+**/npm-debug.log 
+**/.DS_Store

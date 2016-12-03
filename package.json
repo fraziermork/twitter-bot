@@ -1,7 +1,7 @@
 {
   "name": "twitter-bot",
   "version": "0.1.0",
-  "description": "A module to facilitate building simple twitter bots.",
+  "description": "A framework for twitter bots.",
   "main": "./lib/twitter-bot.js",
   "directories": {
     "test": "test"
@@ -17,7 +17,8 @@
     "twitter",
     "bot",
     "rest",
-    "streaming"
+    "streaming", 
+    "twitter-bot"
   ],
   "author": {
     "name": "Frazier Mork",
@@ -29,11 +30,11 @@
       "name": "Frazier Mork",
       "email": "fraziermork@gmail.com",
       "url": "fraziermork.com"
-    }, 
+    },
     {
       "name": "Lex Myers",
       "email": "lex.myers@gmail.com"
-    }, 
+    },
     {
       "name": "Lisa Wenke",
       "email": "lwenke@gmail.com"
@@ -52,6 +53,7 @@
     "mocha": "^2.4.5"
   },
   "dependencies": {
+    "debug": "^2.3.3",
     "lodash": "^4.7.0",
     "twit": "^2.2.3"
   },
@@ -61,6 +63,5 @@
       "email": "fraziermork@gmail.com",
       "url": "fraziermork.com"
     }
-  ] 
-  
+  ]
 }
