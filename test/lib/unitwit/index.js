@@ -5,7 +5,7 @@ const EventEmitter = require('events');
 const Promise      = require('bluebird');
 const debug        = require('debug')('tb:Unitwit');
 
-module.exports = Unitwit;
+module.exports     = Unitwit;
 
 /**  
  * Unitwit - description  
@@ -15,13 +15,15 @@ module.exports = Unitwit;
 function Unitwit(config) {
   debug('Unitwit', config);
   this.validateConfig(config);
-  this.expectations = [];
-  this.requests     = [];
-  this.flusher      = new EventEmitter();
-  this.stream       = null;
+  this.expectations   = [];
+  this.requests       = [];
+  this.flusher        = new EventEmitter();
+  this.stream         = null;
+  this.streamEndpoint = null;
+  this.streamParams   = null;
 }
 
-// Methods that correspond to real twit methods
+// Methods that implement the same interface as the real twit 
 Unitwit.prototype.get                   = get;
 Unitwit.prototype.post                  = post;
 Unitwit.prototype.request               = request;
