@@ -18,7 +18,7 @@ function Unitwit(config) {
   this.expectations   = [];
   this.requests       = [];
   this.flusher        = new EventEmitter();
-  this.stream         = null;
+  this.apiStream      = null;
   this.streamEndpoint = null;
   this.streamParams   = null;
 }
@@ -135,12 +135,13 @@ function request(method, endpoint, params = {}, callback) {
 }
 
 
-function stream(endpoint, params) {
+function stream(endpoint, params = {}) {
   debug(`Stream initiated to ${endpoint} endpoint.`, params);
-  this.stream         = new EventEmitter();
+  if (!endpoint || typeof endpoint !== 'string') throw new TypeError('Streaming API endpoint is required.');
+  this.apiStream      = new EventEmitter();
   this.streamEndpoint = endpoint;
   this.streamParams   = params;
-  return this.stream;
+  return this.apiStream;
 }
 
 
@@ -160,8 +161,8 @@ function validateConfig(config) {
     'access_token_secret',
   ];
   requiredKeys.forEach((key) => {
-    if (!config[key]) {
-      throw new Error(`Unitwit config must include key ${key}.`);
+    if (!config[key] || typeof config[key] !== 'string') {
+      throw new Error(`Unitwit config must include key ${key}, and that key must be a string.`);
     } 
   });
 }
@@ -253,7 +254,7 @@ function mockTweet(tweet) {
  */ 
 function mockStreamEvent(eventName, data) {
   debug(`Mocking an ${eventName} event.`, data);
-  if (!this.stream) throw new Error('Unitwit stream not yet initiated.');
-  this.stream.emit(eventName, data);
+  if (!this.apiStream) throw new Error('Unitwit apiStream not yet initiated.');
+  this.apiStream.emit(eventName, data);
   return this;
 }
