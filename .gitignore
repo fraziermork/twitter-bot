@@ -4,3 +4,4 @@ config/test-config1-lw.js
 **/.DS_Store
 old-version
 notes
+.npm
