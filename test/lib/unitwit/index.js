@@ -20,7 +20,7 @@ function Unitwit(config) {
   this.flusher        = new EventEmitter();
   this.apiStream      = null;
   this.streamEndpoint = null;
-  this.streamParams   = null;
+  this.streamParams   = null; 
 }
 
 // Methods that implement the same interface as the real twit 

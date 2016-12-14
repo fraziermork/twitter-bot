@@ -1,8 +1,8 @@
 // npm modules 
-const debug        = require('debug')('tb:test-Unitwit');
+// const debug        = require('debug')('tb:test-Unitwit');
 const chai         = require('chai');
 const EventEmitter = require('events');
-const Promise      = require('bluebird');
+// const Promise      = require('bluebird');
 
 // internal modules 
 const Unitwit = require('./index');
@@ -37,9 +37,9 @@ describe('Unitwit', function() {
       it('should break without all required keys', function() {
         expect(function() {
           new Unitwit({
-            consumer_key:        'a', 
-            consumer_secret:     'b', 
-            access_token:        'c',
+            consumer_key:    'a', 
+            consumer_secret: 'b', 
+            access_token:    'c',
           });
         }).to.throw(Error, 'Unitwit config must include key access_token_secret, and that key must be a string.');
       });
@@ -54,7 +54,7 @@ describe('Unitwit', function() {
         }).to.throw(Error, 'Unitwit config must include key consumer_secret, and that key must be a string.');
       });
     });
-  });
+  }); 
   
   
   describe('streaming api mock', function() {
