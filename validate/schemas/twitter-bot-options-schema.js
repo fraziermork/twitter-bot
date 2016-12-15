@@ -29,13 +29,18 @@ const twitterBotOptions = {
       
     }, 
     
-    _isRoot: {
-      type: 'boolean',
-    }, 
-    
     content: {
       typeof: 'function',
     },
+    
+    streaming: {
+      type:    'boolean',
+      default: true,
+    },
+    
+    _isRoot: {
+      type: 'boolean',
+    }, 
     
   },
 };
