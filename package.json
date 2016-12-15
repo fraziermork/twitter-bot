@@ -55,6 +55,8 @@
     "mocha": "^2.4.5"
   },
   "dependencies": {
+    "ajv": "^4.10.0",
+    "ajv-keywords": "^1.2.0",
     "bluebird": "^3.4.6",
     "co": "^4.6.0",
     "debug": "^2.3.3",
