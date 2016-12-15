@@ -24,9 +24,8 @@ const defaultValidateOptions = {
   enableAjvKeywords: true, 
 };
 
+
 module.exports = constructValidate;
-
-
 
 /**
  * constructValidate - description

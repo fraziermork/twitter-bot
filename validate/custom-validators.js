@@ -1,3 +1,4 @@
+// npm modules 
 const debug = require('debug')('tb:custom-validators');
 const Twit  = require('twit');
 const _     = require('lodash');
@@ -8,12 +9,12 @@ const _     = require('lodash');
  * 
  * schemaFilenameToCamelCase - The custom validator function 
  *    
- * @param  {object} ajv          - An instance of Ajv  
- * @param  {*}    dataToValidate - The data to validate 
- * @return {boolean}             - The results of the validation 
+ * @param  {object} ajv            - An instance of Ajv  
+ * @param  {*}      dataToValidate - The data to validate 
+ * @return {boolean}               - The results of the validation 
  */
 const customValidators = {
-  configureOptions,
+  configureTwitterBotOptions,
 };
 module.exports = customValidators;
 
@@ -23,15 +24,15 @@ module.exports = customValidators;
  * 
  * @TODO: Figure out how to do custom errors with ajv 
  * @param  {object} ajv         - An instance of Ajv  
- * @param  {type} configureOpts - The options to for the configure function
+ * @param  {type}   configOpts  - The options to for the configure function
  * @return {boolean}            - The results of the ajv validation 
  */ 
-function configureOptions(ajv, configureOpts) {
+function configureTwitterBotOptions(ajv, configOpts) {
   const defaultConfigurationOptions = {
     Twit, 
   };
   
-  const optsAreValid = ajv.validate('configureOptions', configureOpts);
-  _.defaultsDeep(configureOpts, defaultConfigurationOptions);
+  const optsAreValid = ajv.validate('configureTwitterBotOptions', configOpts);
+  _.defaultsDeep(configOpts, defaultConfigurationOptions);
   return optsAreValid;
 }
