@@ -44,10 +44,6 @@ const twitterBotOptions = {
       default: true,
     },
     
-    _isRoot: {
-      type: 'boolean',
-    }, 
-    
   },
 };
 
