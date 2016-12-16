@@ -8,11 +8,13 @@ const twitterBotOptions = {
       items: {
         anyOf: [
           {
+            // TODO: write custom validator to check and see if the schema/rule exists? 
             type: 'string',
           }, 
+          // TODO: write meta schema for rule definition objects like this 
           {
             type:     'object',
-            required: ['name', 'check', 'expected'],
+            required: ['check'],
             
             properties: {
               name:  'string', 
