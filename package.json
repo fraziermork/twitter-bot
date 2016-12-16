@@ -7,7 +7,8 @@
     "test": "test"
   },
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha ./test/**/*.test.js"
+    "test": "./node_modules/mocha/bin/mocha ./test/**/*.test.js", 
+    "docs": "jsdoc"
   },
   "repository": {
     "type": "git",
@@ -52,6 +53,7 @@
     "gulp": "^3.9.1",
     "gulp-eslint": "^2.0.0",
     "gulp-mocha": "^2.2.0",
+    "jsdoc": "^3.4.3",
     "mocha": "^2.4.5"
   },
   "dependencies": {

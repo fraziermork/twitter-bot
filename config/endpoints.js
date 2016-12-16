@@ -1,3 +1,9 @@
+/**
+ * Rest and streaming endpoints organized in a way that makes more sense. 
+ * @module endpoints 
+ * @private 
+ */ 
+
 const endpoints = {
   post: {
     tweet:  'statuses/update',

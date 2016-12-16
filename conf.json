@@ -1,0 +1,18 @@
+{
+    "tags": {
+        "allowUnknownTags": true,
+        "dictionaries": ["jsdoc","closure"]
+    },
+    "source": {
+        "include": ["README.md", "package.json"],
+        "includePattern": ".+\\.js(doc|x)?$",
+        "excludePattern": "(^|\\/|\\\\)_"
+    },
+    "plugins": [
+      "plugins/makrdown"
+    ],
+    "templates": {
+        "cleverLinks": false,
+        "monospaceLinks": false
+    }
+}
