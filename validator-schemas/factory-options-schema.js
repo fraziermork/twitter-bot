@@ -1,13 +1,14 @@
 const factoryOptionsSchema = {
   type: 'object', 
+  id:   'factoryOptions',
   
   properties: {
     content: {
       typeof: 'function',
     },
     
+    // TODO: write custom validator to check and see if the schema it extends exists? 
     extendsSchema: {
-      // TODO: write custom validator to check and see if the schema it extends exists? 
       type: 'string', 
     },
     
@@ -18,6 +19,7 @@ const factoryOptionsSchema = {
           {
             typeof: 'function',
           }, 
+          
           // TODO: write meta schema for rule definition objects like this 
           {
             type:     'object', 
@@ -33,8 +35,9 @@ const factoryOptionsSchema = {
               type: 'boolean',
             },
           },
+          
+          // TODO: custom validator for extendsSchema could apply here too 
           {
-            // TODO: custom validator for extendsSchema could apply here too 
             type: 'string',
           },
         ],

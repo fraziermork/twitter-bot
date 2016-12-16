@@ -1,5 +1,6 @@
 const apiKeysSchema = {
   type: 'object', 
+  id:   'apiKeys',
   
   properties: {
     consumer_key: {
@@ -14,15 +15,13 @@ const apiKeysSchema = {
     access_token_secret: {
       type: 'string',
     },
-    
-    required: [
-      'consumer_key', 
-      'consumer_secret',
-      'access_token',
-      'access_token_secret',
-    ],
   },
-  
+  required: [
+    'consumer_key', 
+    'consumer_secret',
+    'access_token',
+    'access_token_secret',
+  ],
   
 };
 module.exports = apiKeysSchema;

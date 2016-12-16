@@ -1,5 +1,6 @@
 const twitterBotOptions = {
   type: 'object', 
+  id:   'TwitterBotOptions',
   
   properties: {
     rules: {
@@ -14,10 +15,13 @@ const twitterBotOptions = {
           // TODO: write meta schema for rule definition objects like this 
           {
             type:     'object',
-            required: ['check'],
-            
+            required: [
+              'check',
+            ],
             properties: {
-              name:  'string', 
+              name: {
+                type: 'string',
+              }, 
               check: {
                 typeof: 'function',
               },
