@@ -6,11 +6,7 @@ const configureTwitterBotOptionsSchema = {
     Twit: {
       typeof: 'function',
     },
-    // stuff: {
-    //   type: 'boolean',
-    // },
   },
-  
   
 };
 

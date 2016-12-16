@@ -83,19 +83,6 @@ describe('validate', function() {
       }).to.throw(ValidationError);
     });
     
-  });
-  
-  // describe('validate', function() {
-  //   
-  //   
-  //   
-  // });
-  
-  // describe('validate', function() {
-  //   
-  //   
-  //   
-  // });
-  
+  });  
   
 });
