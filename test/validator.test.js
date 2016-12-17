@@ -4,7 +4,7 @@ const chai            = require('chai');
 const expect          = chai.expect;
 
 // internal modules 
-const validator       = require('../lib/validate');
+const validator       = require('../lib/validator');
 const ValidationError = require('../lib/validation-error');
 
 
@@ -88,7 +88,7 @@ describe('validator', function() {
         };
       }
       
-      validator.addCustomValidator('testSchema4', this.testSchema4, customValidator);
+      validator.addCustomValidator('testSchema4', customValidator);
       expect(testFlag).to.equal(true);
       
     });
@@ -107,7 +107,7 @@ describe('validator', function() {
         };
       }
       
-      validator.addCustomValidator('testSchema4', this.testSchema4, customValidator);
+      validator.addCustomValidator('testSchema4', customValidator);
       expect(function() {
         validator.validate.testSchema4(validData);
       }).to.not.throw(ValidationError);
@@ -128,7 +128,7 @@ describe('validator', function() {
         };
       }
       
-      validator.addCustomValidator('testSchema4', this.testSchema4, customValidator);
+      validator.addCustomValidator('testSchema4', customValidator);
       expect(function() {
         validator.validate.testSchema4(invalidData);
       }).to.not.throw(ValidationError);
