@@ -1,11 +1,12 @@
-const ruleProviderOptions = {
+const ruleProviderOptionsSchema = {
   type: 'object',
+  id:   'ruleProviderOptions',
   
   properties: {
     v5: {
-      type:    'boolean', 
-      default: true, 
+      type:    'boolean',
+      default: true,
     },
   },
 };
-module.exports = ruleProviderOptions;
+module.exports = ruleProviderOptionsSchema;
