@@ -10,27 +10,59 @@ const RuleManager  = require('../lib/rule-manager');
 describe('RuleManager', function() {
   
   describe('compile', function() {
+    describe('schema rules', function() {
+      it('should handle schema based rules');
+      it('should handle rules objects with schema based rules');
+      it('should handle custom check functions');
+      describe('errors', function() {
+        it('should handle errors from invalid schemas');
+        it('should throw an error if the custom check function doesn\'t return a function');
+      });
+    });
     
-    it('should be able to handle string rule names that return a single rule');
+    describe('custom check funtion rules', function() {
+      it('should handle custom check function rules');
+      it('should handle rules objects with custom check functions');
+      describe('errors', function() {
+        it('should handle errors thrown from inside custom check functions');
+      });
+    });
     
-    it('should be able to handle string rule names that return an array of rules');
+    describe('standard rule names', function() {
+      it('should handle string rule names for standard rules');
+      it('should handle rules objects with standard rule names');
+      it('should handle rules objects with standard rule names and options');
+      describe('errors', function() {
+        it('should throw errors if a rule with that name doesn\t exist');
+        it('should throw errors if a rule with the name of options.ruleName name doesn\t exist');
+      });
+    });
     
-    it('should be able to handle input check functions');
+    describe('meta rule names', function() {
+      it('should handle string rule names for meta rules');
+      it('should handle rules objects with meta rule names');
+      it('should handle rules objects with meta rule names and options');
+      it('should handle rules objects with meta rule names nad custom options by subrule');
+    });
     
-    it('should be able to handle full rules objects');
+    describe('multiple rules', function() {
+      it('should be able to compile multiple rules');
+      it('should be able to compile multiple rules in different formats');
+    });
     
+    describe('errors', function() {
+      it('should throw errors for invalid rules objects');
+    });
   });
   
+  
   describe('checkRules', function() {
-    
-    it('should be able to handle tweets that do not match with the rules');
-    
-    it('should be able to handle tweets that match with the rules');
-    
-    it('should throw the appropriate error if rules dont return the appropriate thing');
-    
-    it('should reject if one of the rules functions throws an error');
-    
+    it('should handle tweets that match with the set of rules');
+    it('should handle tweets that don\'t match with the set of rules');
+    describe('errors', function() {
+      it('should throw an error if rules don\'t return a boolean');
+      it('should handle errors thrown by check functions');
+    });
   });
   
 });
