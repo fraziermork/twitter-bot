@@ -205,15 +205,97 @@ describe('RuleManager', function() {
     });
     
     describe('meta rule names', function() {
-      it('should handle string rule names for meta rules');
-      it('should handle rules objects with meta rule names');
-      it('should handle rules objects with meta rule names and options');
-      it('should handle rules objects with meta rule names nad custom options by subrule');
+      before('define meta rule', function() {
+        this.firstSubRuleName = ruleProvider.define({
+          check:    function() {}, 
+          ruleName: 'metaRuleCompileTestOne',
+          options: {
+            foo: 1, 
+            bar: 2, 
+          },
+        });
+        this.secondSubRuleName = ruleProvider.define({
+          check:    function() {}, 
+          ruleName: 'metaRuleCompileTestTwo',
+          options: {
+            foo: 1, 
+            bar: 2, 
+          },
+        });
+        
+        this.metaRuleDefinitionOptions = {
+          ruleName:   'metaRuleCompileTest',
+          isMetaRule: true,
+          
+          defaultOptions: {
+            [this.firstSubRuleName]: {
+              foo: 3,
+            }, 
+            [this.secondSubRuleName]: {
+              foo: 4,
+            }, 
+          },
+          
+          rules: [
+            this.firstSubRuleName,
+            this.secondSubRuleName,
+          ],
+        };
+        this.metaRuleName = ruleProvider.define(this.metaRuleDefinitionOptions);
+      });
+      it('should handle a string rule name for a meta rule', function() {
+        const ruleManager = new RuleManager([this.metaRuleName]);
+        expect(ruleManager.rules.length).to.equal(2);
+        [this.firstSubRuleName, this.secondSubRuleName].forEach((ruleName, i) => {
+          expect(ruleManager.rules[i].ruleName).to.equal(ruleName);
+        });
+      });
+      it('should handle rules objects with meta rule names', function() {
+        const ruleManager = new RuleManager([{ ruleName: this.metaRuleName }]);
+        expect(ruleManager.rules.length).to.equal(2);
+        [this.firstSubRuleName, this.secondSubRuleName].forEach((ruleName, i) => {
+          expect(ruleManager.rules[i].ruleName).to.equal(ruleName);
+        });
+      });
+      it('should handle rules objects with meta rule names and options', function() {
+        const ruleManager = new RuleManager([{ 
+          ruleName: this.metaRuleName, 
+        }]);
+        expect(ruleManager.rules.length).to.equal(2);
+        [this.firstSubRuleName, this.secondSubRuleName].forEach((ruleName, i) => {
+          expect(ruleManager.rules[i].ruleName).to.equal(ruleName);
+          expect(ruleManager.rules[i].options.foo).to.equal(this.metaRuleDefinitionOptions.defaultOptions[ruleName].foo);
+        });
+      });
     });
     
     describe('multiple rules', function() {
-      it('should be able to compile multiple rules');
-      it('should be able to compile multiple rules in different formats');
+      it('should be able to compile multiple rules in different formats', function() {
+        this.firstCompileRuleName = ruleProvider.define({
+          check:    function() {}, 
+          ruleName: 'multipleCompileTestOne',
+          options: {
+            foo: 1, 
+            bar: 2, 
+          },
+        });
+        this.secondCompileRuleName = ruleProvider.define({
+          check:    function() {}, 
+          ruleName: 'multipleCompileTestTwo',
+          options: {
+            foo: 1, 
+            bar: 2, 
+          },
+        });
+        const ruleManager = new RuleManager([
+          this.firstCompileRuleName,
+          { ruleName: this.secondCompileRuleName },
+        ]);
+        expect(ruleManager.rules.length).to.equal(2);
+        [this.firstCompileRuleName, this.secondCompileRuleName].forEach((ruleName, i) => {
+          expect(ruleManager.rules[i].ruleName).to.equal(ruleName);
+        });
+      });
     });
     
     describe('errors', function() {

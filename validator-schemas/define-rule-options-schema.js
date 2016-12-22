@@ -9,8 +9,13 @@ const defineRuleOptionsSchema = {
     check: {
       typeof: 'function',
     },
+    options: {
+      type:    'object',
+      default: {},
+    },
     defaultOptions: {
-      type: 'object',
+      type:    'object',
+      default: {},
     },
     schema: {
       type: 'object',
