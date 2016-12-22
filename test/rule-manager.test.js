@@ -311,12 +311,68 @@ describe('RuleManager', function() {
   
   
   describe('checkRules', function() {
-    it('should handle tweets that match with the set of rules');
-    it('should handle tweets that don\'t match with the set of rules');
+    before('build ruleManager instance', function() {
+      this.options = {
+        errorContent:      'throw an error if tweet.content equals this',
+        matchContent:      'return true if tweet.content equals this',
+        nonBooleanContent: 'return something other than a boolean if tweet.content equals this',
+      };
+      
+      this.ruleManager = new RuleManager([{
+        ruleName: 'fubar',
+        options:  this.options,
+        check(tweet, ctx, options) {
+          return new Promise((resolve, reject) => {
+            expect(tweet).to.be.a('object');
+            expect(ctx).to.be.a('object');
+            expect(options).to.be.a('object');
+            if (tweet.content === options.errorContent) return reject(new Error('uh oh'));
+            if (tweet.content === options.nonBooleanContent) return resolve(1);
+            if (tweet.content === options.matchContent) {
+              ctx.matchContent = tweet.content;
+              return resolve(true);
+            }
+            return resolve(false);
+          });
+        }, 
+      }]);
+    });
+    
+    it('should handle tweets that match with the set of rules', function(done) {
+      this.ruleManager.checkRules({
+        content: this.options.matchContent,
+      })
+        .then((matchResult) => {
+          expect(matchResult.context.matchContent).to.equal(this.options.matchContent);
+          expect(matchResult.match).to.equal(true);
+          done();
+        })
+        .catch(done);
+    });
+    it('should handle tweets that don\'t match with the set of rules', function(done) {
+      this.ruleManager.checkRules({
+        content: 'not a match',
+      })
+      .then((matchResult) => {
+        expect(matchResult.match).to.equal(false);
+        done();
+      })
+      .catch(done);
+    });
     describe('errors', function() {
-      it('should throw an error if rules don\'t return a boolean');
+      it('should throw an error if rules don\'t return a boolean', function(done) {
+        this.ruleManager.checkRules({
+          content: this.options.nonBooleanContent,
+        })
+          .then((matchResult) => {
+            done(new Error('Check function should have thrown error'));
+          })
+          .catch((err) => {
+            expect(err).to.be.instanceof(Error);
+            done();
+          });
+      });
       it('should handle errors thrown by check functions');
     });
   });
-  
 });
