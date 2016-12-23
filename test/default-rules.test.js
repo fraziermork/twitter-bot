@@ -1,14 +1,26 @@
 // npm modules 
-const debug         = require('debug')('tb:test-ruleManager');
-const chai          = require('chai');
-const expect        = chai.expect;
+const debug        = require('debug')('tb:test-ruleManager');
+const chai         = require('chai');
+const expect       = chai.expect;
 
 // internal modules 
-const defaultRules  = require('../rules');
-const mockTweetData = require('./data/mock-tweet-data');
+const defaultRules = require('../rules');
+// const metaRules    = require('../rules/meta-rules');
+const Unitwit      = require('./lib/unitwit');
 
-describe('default rules', function() {
-  
-  
-  
-});
+
+// describe('rules', function() {
+//   describe('default rules', function() {
+//     
+//     
+//     
+//     
+//     
+//   });
+//   
+//   // describe('meta rules', function() {
+//   //   
+//   //   
+//   // });
+//   
+// });

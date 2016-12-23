@@ -23,7 +23,7 @@
     ],
     "import/no-extraneous-dependencies": [
       2, 
-      { "devDependencies": [ "**/*.test.js" ] }
+      { "devDependencies": [ "**/*.test.js", "**/test/**/*.js" ] }
     ],
     "space-before-function-paren": [
       2, 

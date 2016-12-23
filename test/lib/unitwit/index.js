@@ -5,6 +5,9 @@ const EventEmitter = require('events');
 const Promise      = require('bluebird');
 const debug        = require('debug')('tb:Unitwit');
 
+
+const mock         = require('./mock');
+Unitwit.mock       = mock;
 module.exports     = Unitwit;
 
 /**  
@@ -14,7 +17,7 @@ module.exports     = Unitwit;
  */   
 function Unitwit(config) {
   debug('Unitwit', config);
-  this.validateConfig(config);
+  this._validateConfigOrThrow(config);
   this.expectations   = [];
   this.requests       = [];
   this.flusher        = new EventEmitter();
@@ -24,18 +27,18 @@ function Unitwit(config) {
 }
 
 // Methods that implement the same interface as the real twit 
-Unitwit.prototype.get                   = get;
-Unitwit.prototype.post                  = post;
-Unitwit.prototype.request               = request;
-Unitwit.prototype.stream                = stream;
-Unitwit.prototype.validateConfig        = validateConfig;
+Unitwit.prototype.get                     = get;
+Unitwit.prototype.post                    = post;
+Unitwit.prototype.stream                  = stream;
+Unitwit.prototype.request                 = request;
+Unitwit.prototype._validateConfigOrThrow  = _validateConfigOrThrow;
 
 // Unitwit only methods 
-Unitwit.prototype.expect                = expect;
-Unitwit.prototype.flush                 = flush;
-Unitwit.prototype.verifyExpectationsMet = verifyExpectationsMet;
-Unitwit.prototype.mockTweet             = mockTweet;  
-Unitwit.prototype.mockStreamEvent       = mockStreamEvent;
+Unitwit.prototype.expect                  = expect;
+Unitwit.prototype.flush                   = flush;
+Unitwit.prototype.verifyExpectationsMet   = verifyExpectationsMet;
+Unitwit.prototype.mockTweet               = mockTweet;  
+Unitwit.prototype.mockStreamEvent         = mockStreamEvent;
 
 
 
@@ -72,6 +75,25 @@ function get(...args) {
  */   
 function post(...args) {
   return this.request.call(this, 'POST', ...args);
+}
+
+
+
+
+/**
+ * stream - Initiates a mock streaming connection to an endpint 
+ *  
+ * @param  {string}       endpoint - The endpoint to mock a stream for 
+ * @param  {object}       [params] - Options to configure the stream 
+ * @return {EventEmitter}          - The mocked stream 
+ */ 
+function stream(endpoint, params = {}) {
+  debug(`Stream initiated to ${endpoint} endpoint.`, params);
+  if (!endpoint || typeof endpoint !== 'string') throw new TypeError('Streaming API endpoint is required.');
+  this.apiStream      = new EventEmitter();
+  this.streamEndpoint = endpoint;
+  this.streamParams   = params;
+  return this.apiStream;
 }
 
 
@@ -137,22 +159,13 @@ function request(method, endpoint, params = {}, callback) {
 }
 
 
-function stream(endpoint, params = {}) {
-  debug(`Stream initiated to ${endpoint} endpoint.`, params);
-  if (!endpoint || typeof endpoint !== 'string') throw new TypeError('Streaming API endpoint is required.');
-  this.apiStream      = new EventEmitter();
-  this.streamEndpoint = endpoint;
-  this.streamParams   = params;
-  return this.apiStream;
-}
-
 
 /**
-* validateConfig - Does quick validation to ensure required keys are present
+* _validateConfigOrThrow - Does quick validation to ensure required keys are present
 *  
 * @param  {Object} config description 
 */ 
-function validateConfig(config) {
+function _validateConfigOrThrow(config) {
   if (!config) throw new Error('Config must be present for unitwit');
   if (typeof config !== 'object') throw new TypeError(`config must be ojbect, got ${typeof config}`);
   
