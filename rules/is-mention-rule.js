@@ -1,8 +1,8 @@
-const utils    = require('../utils');
+const utils    = require('../lib/utils');
 
-module.exports = mention;
+module.exports = isMention;
 
-function mention(tweet, context, options) {
+function isMention(tweet, context, options) {
   
   
   

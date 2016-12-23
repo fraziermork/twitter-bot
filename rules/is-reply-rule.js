@@ -1,8 +1,8 @@
-const utils    = require('../utils');
+const utils    = require('../lib/utils');
 
-module.exports = reply;
+module.exports = isReply;
 
-function reply(tweet, context, options) {
+function isReply(tweet, context, options) {
   
   
   

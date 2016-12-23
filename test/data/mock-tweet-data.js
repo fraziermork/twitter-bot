@@ -22,7 +22,7 @@ const mockTweets = {
     source:                    'web',
     text:                      '', 
     truncated:                 false, 
-    user:                      mockTweets.otherUser,
+    user:                      null,
     
     id:                        null, 
     id_str:                    null,
@@ -98,6 +98,7 @@ const mockTweets = {
     
     genericTweet.created_at = (new Date()).toUTCString();
     genericTweet.text       = text;
+    genericTweet.user       = user || mockTweets.otherUser;
     
     // Using Date.now() as a simple way to generate largeish, unique numbers 
     genericTweet.id         = Date.now();
