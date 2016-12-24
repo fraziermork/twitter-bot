@@ -27,13 +27,13 @@ const mock = {
     /**   
      * setUser - Sets the value of the mock users 
      *    
-     * @param  {object} user                   - A twitter user object 
-     * @param  {boolean} authenticatedUserFlag - If true, sets mock.authenticatedUser, otherwise sets mock.otherUser  
+     * @param  {object} user    - A twitter user object 
+     * @param  {string} userKey - The key to store the user object on mock.user as, defaults to current. 'other' should also commonly be used. 
      */   
-    setUser(user, authenticatedUserFlag) {
-      const userKey = authenticatedUserFlag ? 'current' : 'other';
+    setUser(user, userKey) {
+      userKey = userKey ? userKey : 'current';
       debug('setDefaultUser');
-      _.assign(mock.user[userKey], user);
+      _.assign(mock.user[userKey] || {}, user);
     },
     
   },
@@ -92,6 +92,9 @@ const mock = {
         // extended_entities: [],
       },
       
+      // // Retweets only 
+      // retweeted_status: {},
+      
       // // Quoted tweets only:
       //  
       // quoted_status_id: null,
@@ -113,9 +116,6 @@ const mock = {
       // 
       // // Not sure what this does 
       // scopes: {},
-      // 
-      // // Full tweet, only present on retweets 
-      // retweeted_status: {},
       // 
       // // Info about whether unavailable 
       // withheld_copyright: false, 
@@ -150,15 +150,18 @@ const mock = {
     
     
     /**  
-    * mention - Generate a mock mention of the authenticated user 
+    * mention - Generate a mock mention of a user
+    * @todo Figure out whether mentions need to have any other properties set on them  
     *    
-    * @param  {string} text - The text of the tweet mentioning the authenticated user
-    * @return {object}      - A mock tweet object 
+    * @param  {string} text        - The text of the tweet mentioning the authenticated user
+    * @param  {object} [user]      - The user to mention, defaults to mock.user.current
+    * @param  {object} [otherUser] - The user who made the tweet. Defaults to mock.user.other
+    * @return {object}             - A mock tweet object 
     */   
-    mention(text) {
-      const currentUser = mock.user.current;
-      const baseTweet   = mock.generic(`@${currentUser.screen_name} ${text}`);
-      
+    mention(text, user, otherUser) {
+      const currentUser = user ? user : mock.user.current;
+      const baseTweet   = mock.tweet.generic(`@${currentUser.screen_name} ${text}`, otherUser);
+        
       return baseTweet;
     },
     
@@ -167,26 +170,39 @@ const mock = {
     * reply - Generate a mock reply to the authenticated user 
     * @todo: figure out whether the in_reply_to_user_id_str fields set for both mentions and replies, or just replies
     *     
-    * @param  {string} text             - The text of the tweet mentioning the authenticated user
+    * @param  {string} text             - The text of the tweet replying to the authenticated user
     * @param  {object} [tweetRepliedTo] - Tweet object this reply is in response to, otherwise fields dependent on that get set to null
     * @return {object}                  - A mock tweet object 
     */ 
     reply(text, tweetRepliedTo = {}) {
-      const authenticatedUser = mock.authenticatedUser;
-      const baseTweet = mock.mention(text);
+      const currentUser = mock.user.current;
+      const baseTweet   = mock.tweet.mention(text);
       
-      baseTweet.in_reply_to_screen_name   = authenticatedUser.screen_name;
-      baseTweet.in_reply_to_user_id       = authenticatedUser.id;
-      baseTweet.in_reply_to_user_id_str   = authenticatedUser.id_str;
+      baseTweet.in_reply_to_screen_name   = currentUser.screen_name;
+      baseTweet.in_reply_to_user_id       = currentUser.id;
+      baseTweet.in_reply_to_user_id_str   = currentUser.id_str;
       baseTweet.in_reply_to_status_id     = tweetRepliedTo.id || null;
       baseTweet.in_reply_to_status_id_str = tweetRepliedTo.id_str || null;
       
       return baseTweet;
     },
     
-    // retweet() {
-    //   
-    // },
+    
+    
+    /**    
+     * retweet - Creates a mock retweet 
+     *      
+     * @param  {object} statusToRetweet - A tweet object that should be retweeted
+     * @param  {object} user            - The user to retweet the message. Defaults to mock.user.other
+     * @return {object}                 - A mock tweet object that is a retweet of statusToRetweet
+     */     
+    retweet(statusToRetweet, user) {
+      const retweet            = mock.tweet.generic(null, user);
+      retweet.retweeted_status = statusToRetweet;
+      // Not sure how entities handled with retweets 
+      // retweet.entities         = statusToRetweet.entities;
+      return retweet;
+    },
   },
   
   
@@ -235,7 +251,7 @@ const mock = {
       let hashtagMatches;
       const tweetText = tweet.text;
       const hashtags  = tweet.entities.hashtags;
-      if (!tweetText) throw new Error('Cannot parse tweet without text for hashtags.');
+      if (!tweetText) return;
       
       // Label while loop so that can reach it from inside for loop 
       matchloop:
@@ -267,7 +283,7 @@ const mock = {
       const tweetText    = tweet.text;
       const userMentions = tweet.entities.user_mentions;
       const userKeys     = ['current', 'other'];
-      if (!tweetText) throw new Error('Cannot parse tweet without text for user mentions.');
+      if (!tweetText) return;
       
       // Label while loop so that can reach it from inside for loop 
       matchloop:
@@ -280,9 +296,10 @@ const mock = {
         }
         
         // Find corresponding user 
-        let userToMention = null;
+        let mentionedScreenName = userMentionMatches[0].slice(1);
+        let userToMention       = null;
         for (let j = 0; j < userKeys.length; j++) {
-          if (mock.user[userKeys[j]].screen_name === userMentionMatches[0]) {
+          if (mock.user[userKeys[j]].screen_name === mentionedScreenName) {
             userToMention = mock.user[userKeys[j]];
             break;
           }
@@ -295,8 +312,8 @@ const mock = {
           userToMention = {
             id:          dummyId, 
             id_str:      dummyId.toString(), 
-            name:        userMentionMatches[0], 
-            screen_name: userMentionMatches[0], 
+            name:        mentionedScreenName, 
+            screen_name: mentionedScreenName, 
           };
         }
         
