@@ -97,9 +97,9 @@ const mock = {
       
       // // Quoted tweets only:
       //  
-      // quoted_status_id: null,
+      // quoted_status_id:     null,
       // quoted_status_id_str: null,
-      // quoted_status: {},
+      // quoted_status:        {},
       
       
       // // Can be ignored for now: 

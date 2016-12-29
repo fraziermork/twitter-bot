@@ -26,7 +26,9 @@ describe('RuleManager', function() {
         expect(ruleManager.rules.length).to.equal(1);
         expect(compiledRule.ruleName).to.equal(testSchemaRule.id);
         expect(compiledRule.check).to.be.a('function');
-        expect(compiledRule.schema).to.equal(testSchemaRule);
+        debug('compiledRule.schema \n', compiledRule.schema);
+        debug('testSchemaRule \n', testSchemaRule);
+        expect(compiledRule.schema).to.deep.equal(testSchemaRule);
       });
       it('should handle rules objects with schema based rules', function() {
         const testSchemaRule = {
@@ -45,7 +47,7 @@ describe('RuleManager', function() {
         expect(ruleManager.rules.length).to.equal(1);
         expect(compiledRule.ruleName).to.equal(testSchemaRule.schema.id);
         expect(compiledRule.check).to.be.a('function');
-        expect(compiledRule.schema).to.equal(testSchemaRule.schema);
+        expect(compiledRule.schema).to.deep.equal(testSchemaRule.schema);
       });
       
       it('should prioritize naming schema rules after ruleName over schema.id', function() {
@@ -66,7 +68,7 @@ describe('RuleManager', function() {
         expect(ruleManager.rules.length).to.equal(1);
         expect(compiledRule.ruleName).to.equal(testSchemaRule.ruleName);
         expect(compiledRule.check).to.be.a('function');
-        expect(compiledRule.schema).to.equal(testSchemaRule.schema);
+        expect(compiledRule.schema).to.deep.equal(testSchemaRule.schema);
       });
       it('should handle custom check functions', function() {
         let checkFnHasBeenCalledFlag = false;
@@ -84,7 +86,7 @@ describe('RuleManager', function() {
           
           check(ajv, rule) {
             expect(ajv).to.equal(ruleProvider.ajv);
-            expect(rule).to.equal(testSchemaRule);
+            expect(rule).to.deep.equal(testSchemaRule);
             checkFnHasBeenCalledFlag = true;
             return function(){};
           },
@@ -94,7 +96,7 @@ describe('RuleManager', function() {
         expect(ruleManager.rules.length).to.equal(1);
         expect(compiledRule.ruleName).to.equal(testSchemaRule.ruleName);
         expect(compiledRule.check).to.be.a('function');
-        expect(compiledRule.schema).to.equal(testSchemaRule.schema);
+        expect(compiledRule.schema).to.deep.equal(testSchemaRule.schema);
         expect(checkFnHasBeenCalledFlag).to.equal(true);
       });
       describe('errors', function() {
