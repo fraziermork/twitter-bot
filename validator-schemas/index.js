@@ -10,6 +10,7 @@ const schemas = {
   defineRuleOptions:          require('./define-rule-options-schema'),
   twitterBotOptions:          require('./twitter-bot-options-schema'),
   factoryOptions:             require('./factory-options-schema'),
+  searchTerm:                 require('./search-term-schema'),
   apiKeys:                    require('./api-keys-schema'),
 };
 
